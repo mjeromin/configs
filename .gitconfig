@@ -1,0 +1,13 @@
+[user]
+	name = Mark Jeromin
+	email = mark.jeromin@sysfrog.net
+[core]
+	editor = /usr/bin/vim
+[commit]
+[diff]
+[color]
+	ui = auto
+[alias]
+	st = status
+	br = branch
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
