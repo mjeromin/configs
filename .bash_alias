@@ -1,0 +1,38 @@
+# .bash_alias
+
+# add a little color 
+alias ls="ls -k --color"
+alias grep="grep --color='auto'"
+alias tmux='tmux -2'
+
+# cd command 
+alias    ..='cd ..'
+alias   ...='cd ../../../'
+alias  ....='cd ../../../../'
+alias .....='cd ../../../../'
+alias    .4='cd ../../../../'
+alias    .5='cd ../../../../..'
+
+# safety first
+alias rm='rm -I --preserve-root'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+alias ports='netstat -tulpn'
+
+# mtr > ping
+# https://en.wikipedia.org/wiki/MTR_(software)
+alias ping=mtr
+
+alias vi=vim
+
+# for some reason I can never remember xrandr
+alias resolution=xrandr
+
+# Get your current public IP
+alias ipchicken="curl -s https://ipchicken.com/ | grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | tr -d -c [:digit:][=.=]" 
+
+# launch firefox inside of a FreeBSD jail named browser and forward the window to your X display (assumes you set this up already)
+alias firejail='ssh -X browser firefox &'
+alias jailbird='ssh -X mail thunderbird &'

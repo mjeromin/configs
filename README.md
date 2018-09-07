@@ -1,20 +1,9 @@
-# Configs 
+# Dotfiles
+I'm stashing my dotfiles here. It's easier than carrying them around in a thumbdrive.
 
-This repo is for my personal $HOME directory configs. Installation has been delegated to Ansible and some helper shell scripts under `ansible/`. 
-
-## Ansible Installation
-
-The automation has been tested against Ansible-2.4. You can install ansible in your $HOME if python-virtualenv is already installed:
+## Installation
+For an empty directory, it's probably just as simple as
 ```
-mkdir ~/bin
-cd ~/bin
-virtualenv .ansible-ve
-. .ansible-ve/bin/activate
-pip install --upgrade pip
-pip install ansible==2.4.2
-for file in .ansible-ve/bin/ansible*; do
-    ln -s $file;
-done
+cd $HOME
+git clone https://github.com/mjeromin/dotfiles.git .
 ```
-
-Make sure ~/bin is in your $PATH.

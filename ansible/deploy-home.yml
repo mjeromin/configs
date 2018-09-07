@@ -1,6 +1,0 @@
----
-# This playbook prepares my $HOME environment
-
-- hosts: localhost
-  roles:
-    - gitconfig

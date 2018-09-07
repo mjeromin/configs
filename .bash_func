@@ -1,0 +1,137 @@
+# .bash_function
+
+# process table views 
+psmem()
+{
+    ps -e -orss=,args= | sort -b -k1,1n | pr -TW$COLUMNS | sort -rn | head
+}
+
+psuser() { 
+    ps aux | grep "^$USER" | pr -TW$COLUMNS | sort -rn
+}
+
+psgrep() {
+    [ -z "$1" ] && echo "ERROR: Need name to grep for" && return 1
+    ps aux | grep -v grep | grep --color $1
+}
+
+# countdown from N 
+countdown() { case "$1" in -s) shift;; *) set $(($1 * 60));; esac; local S=" "; for i in $(seq "$1" -1 1); do echo -ne "$S\r $i\r"; sleep 1; done; echo -e "$S\rBOOM"; }
+
+blow() {
+    [ -z "$1" ] && echo \
+        "Encrypt: $FUNCNAME FILE" && return 1
+    gpg -v -c -a --cipher-algo TWOFISH -o "$1.blow" "$1" 
+}
+
+fish() {
+    [ -z "$1" -o -z "$2" ] && echo \
+        "Decrypt: $FUNCNAME INFILE OUTFILE" && return 1
+    gpg -v -d --cipher-algo TWOFISH -o "$2" "$1"
+}
+
+aes_encrypt() {
+    [ -z "$1" ] && echo \
+        "Encrypt: $FUNCNAME INFILE" && return 1
+    openssl enc -aes-256-cbc -salt -a -in $1 -out ${1}.enc
+}
+
+aes_decrypt() {
+    [ -z "$1" ] && echo \
+        "Decrypt: $FUNCNAME INFILE" && return 1
+    filename=`echo $1 | cut -d. -f1`
+    openssl enc -aes-256-cbc -salt -a -d -in ${filename}.enc -out $filename
+}
+
+# A Perl one-liner to print a series of characters and their associated ASCII values
+asciigen() {
+    perl -e '{ for (my $i = 0; $i<1000; $i++) { printf "%d:'%c'\n",$i,$i; } }' 2> /dev/null
+}
+
+# Print a table of ANSI colors and codes 
+# http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html
+color_codes() {
+    local T='aBc123'
+    
+    echo -e "\n                 40m     41m     42m     43m\
+        44m     45m     46m     47m";
+    
+    for FGs in '    m' '   1m' '  30m' '1;30m' '  31m' '1;31m' '  32m' \
+        '1;32m' '  33m' '1;33m' '  34m' '1;34m' '  35m' '1;35m' \
+        '  36m' '1;36m' '  37m' '1;37m'; do 
+        local FG=${FGs// /}
+        echo -en " $FGs \033[$FG  $T  "
+        for BG in 40m 41m 42m 43m 44m 45m 46m 47m; do
+            echo -en "\033[$FG\033[$BG  $T  \033[0m";
+        done
+        echo;
+     done
+     echo
+}
+
+# Print a table of ANSI console colors and names
+color_table() {
+    local FGNAMES=(' black ' '  red  ' ' green ' ' yellow' '  blue ' 'magenta' '  cyan ' ' white ')
+    local BGNAMES=('DFT' 'BLK' 'RED' 'GRN' 'YEL' 'BLU' 'MAG' 'CYN' 'WHT')
+    
+    echo "     +--------------------------------------------------------------------------+"
+    for b in {0..8}; do
+        ((b>0)) && bg=$((b+39))
+        
+        echo -en "\033[0m ${BGNAMES[b]} | "
+        
+        for f in {0..7}; do
+            echo -en "\033[${bg}m\033[$((f+30))m ${FGNAMES[f]} "
+        done
+        
+        echo -en "\033[0m |"
+        echo -en "\033[0m\n\033[0m     | "
+        
+        for f in {0..7}; do
+            echo -en "\033[${bg}m\033[1;$((f+30))m ${FGNAMES[f]} "
+        done
+        
+        echo -en "\033[0m |"
+        echo -e "\033[0m"
+        
+        ((b<8)) &&
+        echo "     +--------------------------------------------------------------------------+"
+    done
+    echo "     +--------------------------------------------------------------------------+"
+}
+
+# neat Matrix effect in your terminal
+thematrix() {
+    COLUMNS=119
+    tr -c "[:alpha:]" " " < /dev/urandom | dd cbs=$COLUMNS conv=unblock | GREP_COLOR="1;32" grep --color "[^ ]"
+}
+
+# This function will check the job control queue size (three times per second).
+# If the size is greater than or equal to parameter #1, then the function
+# will wait/block until the queue drains to an acceptable level. Useful when you are forking
+# a lot of processes in parallel and need to keep your fork rate under control else risk OOM failures.
+# http://prll.sourceforge.net/shell_parallel.html
+nrwait() {
+  local job_count
+  if [[ -z $1 ]] ; then
+      # default to maximum of 2 parallel jobs if no params
+      job_count=2
+  else
+      job_count=$1
+  fi
+
+  if [[ $(jobs -p | wc -l) -ge $job_count ]] ; then
+      echo "[job control batch size max: $job_count, sleeping...]"
+  fi
+  while [[ $(jobs -p | wc -l) -ge $job_count ]] ; do
+      sleep 0.33;
+  done
+}
+
+# This function will wait/block while a file exists. File existence polling is every 30s.
+waitfile() {
+    while [ -e "$1" ]; do
+        echo "waitfile exists [$1]. Sleeping..."
+        sleep 30
+    done
+}
