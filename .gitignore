@@ -1,0 +1,14 @@
+# since this will land in our $HOME, we'll negate the ignore pattern so these are the files we will include:
+*
+!.gitignore
+!.ansible.cfg
+!.bash*
+!.bc
+!.fwknoprc
+!.gitconfig
+!.tmux.conf
+!.vimrc
+!LICENSE
+!README.md
+
+.bash_history

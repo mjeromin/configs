@@ -13,8 +13,20 @@ export HISTIGNORE="cd:ls:[bf]g:clear:exit"
 # LS_COLORS setup
 eval `dircolors -b`
 
+# Use less command as a pager
+export PAGER=less
+
+# Set vim as default text editor
+export EDITOR=vim VISUAL=vim
+
+# set our temp directories
+[ -d ~/tmp ] && export TMP=~/tmp TEMP=~/tmp || export TMP=/tmp TEMP=/tmp
+
 # set a config location for bc calculator
 export BC_ENV_ARGS="$HOME/.bc"
 
 # I had to do this to get color for git diffs on FreeBSD 
 [ `uname` == "FreeBSD" ] && export MORE="-erX"
+
+# set this to anything to avoid stripping description in --option=description of './configure --help' during autocompletion
+COMP_CONFIGURE_HINTS=1

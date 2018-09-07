@@ -1,11 +1,12 @@
 # .bash_alias
 
 # add a little color 
-alias ls="ls -k --color"
-alias grep="grep --color='auto'"
+alias ls="ls -k --color=auto"
+alias grep="grep --color=auto"
 alias tmux='tmux -2'
 
-# cd command 
+# cd commands
+alias    cd=cd_history
 alias    ..='cd ..'
 alias   ...='cd ../../../'
 alias  ....='cd ../../../../'
