@@ -29,10 +29,10 @@ if &term=="xterm"
      set t_Sf=[3%dm
 endif
 
-" In many terminal emulators the mouse works just fine, thus enable it.
-if has('mouse')
-  set mouse=a
-endif
+" In many terminal emulators the mouse works just fine, but lately I find it annoying
+"if has('mouse')
+"  set mouse=a
+"endif
 
 " Redefine tab as 4 spaces, Stack Overflow answer from Laurence Gonsalves
 " stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces
