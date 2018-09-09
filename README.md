@@ -18,7 +18,7 @@ rm -rf .git/ /tmp/dotfiles
 ```
 
 ## .bash_prompt
-This is probably the most interesting dotfile, especially now that most terminal emulators support color and emoji. This file controls the Bash prompt behavior. $PS1 is dynamically generated with features that include: displaying of exit code status, an alarm clock, mail notification, current working directory, current time, current git branch, number of commits ahead/behind, as well as the number of git stashes.
+This is probably the most interesting dotfile, especially now that most terminal emulators support [color](https://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/x329.html) and [emoji](https://www.unicode.org/emoji/charts/full-emoji-list.html#1f600). This file controls the Bash prompt behavior. $PS1 is dynamically generated with features that include: displaying of exit code status, an alarm clock, mail notification, current working directory, current time, current git branch, number of commits ahead/behind, as well as the number of git stashes.
 
 ![](.img/full-prompt1.png)
 ![](.img/root-prompt1.png)
