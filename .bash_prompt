@@ -52,9 +52,9 @@ titlebar() {
 # This function (really just "inline python" via bash heredoc) truncates pwd to under 25 characters and prints to STDOUT.
 pwdtrunc() {
 python - <<END
-from os import path,getcwd
+from os import path,getenv
 homedir = path.expanduser('~')
-pwd = getcwd()
+pwd = getenv('PWD')
 # $HOME abbreviated with a tilde
 pwd = pwd.replace(homedir, '~', 1)
 if len(pwd) >= 25:
