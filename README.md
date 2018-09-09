@@ -69,4 +69,4 @@ Unfortunately, these terminals are not yet ready for emoji:
 * xterm
 
 ## Licensing
-Most of the files in this repo are public domain (see [PUBLIC DOMAIN](./LICENSE-PUBLICDOMAIN)) unless specified differently at the top of the file. When possible, I tried giving credit to any originators of public domain works in the comments.
+Most of the files in this repo are public domain (see [PUBLIC DOMAIN](./LICENSE-PUBLICDOMAIN)) unless specified differently at the top of the file. When possible, I tried giving credit to any originators of public domain works in the comments. +1
