@@ -8,7 +8,7 @@
 !.gitconfig
 !.tmux.conf
 !.vimrc
-!LICENSE
+!LICENSE*
 !README.md
 
 .bash_history
