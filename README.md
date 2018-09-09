@@ -18,7 +18,10 @@ rm -rf .git/ /tmp/dotfiles
 ```
 
 ## .bash_prompt
-This is probably the most interesting dotfile, especially now that most terminal emulators support color and emoji. This file controls the Bash prompt behavior. PS1 is dynamically generated with features that include: displaying of exit code status, an alarm clock, mail notification, current working directory, current time, current git branch, number of commits ahead/behind, as well as the number of git stashes.
+This is probably the most interesting dotfile, especially now that most terminal emulators support color and emoji. This file controls the Bash prompt behavior. $PS1 is dynamically generated with features that include: displaying of exit code status, an alarm clock, mail notification, current working directory, current time, current git branch, number of commits ahead/behind, as well as the number of git stashes.
+
+![](.img/full-prompt1.png)
+![](.img/root-prompt1.png)
 
 ### Alert Tray
 The alert tray is the left-most tray and is reserved for alerting functionality.
@@ -40,13 +43,13 @@ The user tray is next from left-to-right and is reserved for environment details
 For awhile I was using `\W` to print the current working directory, but the prompt became too long so I started using pwdtrunc() to shorten it to 25 characters.
 
 ### Time Tray
-The time tray is next from left-to-right and is reserved for displaying the time in 24-hour format. It takes advantage of the `\t` PS1 macro.
+The time tray is next from left-to-right and is reserved for displaying the time in 24-hour format. It takes advantage of the `\t` $PS1 macro.
 
 ### Git Tray
-The git tray is last in line from left-to-right and is reserved for displaying information related to any git repos that may be in your current working directory, or parent working directories. This information includes: current git branch name (prepended with a `β`), number of commits ahead/behind (ie. `+3`), and number of git stashes(ie. `Δ1`). If no git repo is detected, then the Scandinavian vowel Ø is used.
+The git tray is last in line from left-to-right and is reserved for displaying information related to any git repos that may be in your current working directory, or parent working directories. This information includes: current git branch name (prepended with a `β`), number of commits ahead/behind (ie. `+3`), and number of git stashes(ie. `Δ1`). If no git repo is detected, then the Scandinavian vowel `Ø` is used.
 
 ### Random Emoji
-For fun, a random emoji (per session) is printed at the tail of the prompt via the randomoji() function.
+For fun, a random emoji (per session) is printed at the tail of the prompt via the `randomoji()` function.
 
 ### Tested
 The prompt has been tested for working emoji and color in [Fedora 28](https://getfedora.org/) on the following terminals:
