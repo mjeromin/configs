@@ -37,7 +37,7 @@ font_colors['bold_magenta']="\[\033[1;35m\]"
 
 # If your terminal supports it, this function will print out the ANSI
 # escape sequence to set the title bar.
-titlebar() {
+_titlebar() {
     case $TERM in
         xterm*|rxvt*)
             echo '\[\033]0;\u@\h:\w\007\]'
@@ -50,7 +50,7 @@ titlebar() {
 }
 
 # This function (really just "inline python" via bash heredoc) truncates pwd to under 25 characters and prints to STDOUT.
-pwdtrunc() {
+_pwdtrunc() {
 python - <<END
 from os import path,getenv
 homedir = path.expanduser('~')
@@ -65,7 +65,7 @@ END
 }
 
 # This function picks a random emoji and prints it to STDOUT.
-randomoji() {
+_randomoji() {
     local my_emoji_array=(🐶 🐱 🐭 🐹 🐰 🦊 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐸 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🦆 🦅 🦉 🦇 🐺 🐗 🐴 🦄 🐝 🐛 🦋 🐌 🐚 🐞 🐜 🦗 🦂 🐢 🐍 🦎 🦖 🦕 🐙 🦑 🦐 🦀 🐡 🐠 🐟 🐬 🐳 🐋 🦈 🐊 🐅 🐆 🦓 🦍 🐘 🦏 🐪 🐫 🦒 🐃 🐂 🐄 🐎 🐖 🐏 🐑 🐐 🦌 🐕 🐩 🐈 🐓 🦃 🐇 🐁 🐀 🦔 🐉 🐲 🤡 😈 👿 👹 👺 💀 👻 👽 🤖 💩 🎩 ☕️ 🍺 🍕 🍳 🥞 🗿 🚀 🛸 ⚓️ 🌋 🌇 🌆 🏙 🌃 🌌 🌉 🔫 💣 🔥 🔧 🔨 💰 ⏰ 💯 ♻️  🏁 🚩 🦝 🦡 🦜 🦞)
     local COUNT=$(printf '%s\n' "${my_emoji_array[@]}" | wc -l)
     echo ${my_emoji_array[$RANDOM % $COUNT]}
@@ -74,7 +74,7 @@ randomoji() {
 
 # This function prints emoji based on the exit status (ie. from the previous command).
 # We can probably create more exit code classifications and associated emoji, at least 255 if we're feeling ambitious.
-eximoji() {
+_eximoji() {
     local exit_code0_emoji_array=(😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😌 😛 😜 😝 🤪 😷 🤓)
     local exit_code1_emoji_array=(🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 🤤 😒 😓 😔 😕 😲 ☹️  🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 😳 😵 😡 😠 🤬 🤒 🤕 🤢 🤮 🤧 🤥 🤫 🥵 🥶 🥴 🥺)
     if [[ $1 == 0 ]]; then
@@ -89,7 +89,7 @@ eximoji() {
 
 # This function checks for new mail. It prints one of the mailbox emoji depending on mail status.
 # If it cannot perform this check, it will print a wrench. If there is no mailbox, it prints nothing.
-mailmoji() {
+_mailmoji() {
     # if $MAIL is not set, default to the /var/spool path
     local MAILBOX=${MAIL:-/var/spool/mail/$USER}
     if [[ -r "$MAILBOX" ]]; then
@@ -109,7 +109,7 @@ mailmoji() {
 
 # This function will print a blinkable alarm clock if environment variable $ALARMCLOCK is set to a 24-hour time HH:MM.
 # Otherwise, it prints nothing.
-alarmoji() {
+_alarmoji() {
     # first check time format
     if [[ -n "$ALARMCLOCK" ]] && [[ ! $ALARMCLOCK =~ ([01][0-9]|2[0-3]):[0-5][0-9] ]]; then
         # invalid format 
@@ -128,7 +128,7 @@ alarmoji() {
 
 # This function will print the git branch we are under, if applicable.
 # Otherwise, it will print the Scandinavian vowel Ø.
-show_git_branch() {
+_show_git_branch() {
     local REF=$(git symbolic-ref HEAD 2> /dev/null)
     local BRANCH=$(basename $REF 2> /dev/null)
     [ -n "$BRANCH" ] && echo "β $BRANCH" || echo "Ø"
@@ -137,14 +137,18 @@ show_git_branch() {
 
 # This function will print the number of git commits our branch is ahead/behind, if applicable.
 # Otherwise, it will print nothing.
-show_git_commit_plusminus() {
-    local AHEAD_REGEX="Your branch is ahead of .* by ([0-9]+) commits"
-    local BEHIND_REGEX="Your branch is behind .* by ([0-9]+) commits"
+_show_git_commit_plusminus() {
+    [[ "$1" == "-d" ]] && local DEBUG=1 && echo "DEBUG: $FUNCNAME: debug mode"
+    local AHEAD_REGEX="Your branch is ahead of .* by ([0-9]+) commit.*"
+    local BEHIND_REGEX="Your branch is behind .* by ([0-9]+) commit.*"
     local STATUS=$(git status | grep -E 'Your branch' 2> /dev/null)
+    [[ -n "$DEBUG" ]] && [[ -n "$STATUS" ]] && echo "DEBUG: $FUNCNAME: STATUS: $STATUS"
     if [[ -n "$STATUS" ]] && [[ $STATUS =~ $AHEAD_REGEX ]]; then
         echo "+${BASH_REMATCH[1]}"
     elif [[ -n "$STATUS" ]] && [[ $STATUS =~ $BEHIND_REGEX ]]; then
         echo "-${BASH_REMATCH[1]}"
+    elif [[ -n "$STATUS" ]] && [[ -n "$DEBUG" ]]; then
+        echo "DEBUG: $FUNCNAME: NO MATCH"
     else
         : # noop, do nothing
     fi
@@ -153,7 +157,7 @@ show_git_commit_plusminus() {
 
 # this function will print a count of git stashes, if applicable.
 # Otherwise, it will print nothing.
-show_git_stashes() {
+_show_git_stashes() {
     local STASH_COUNT=$(git stash list 2> /dev/null | wc -l)
     [ $STASH_COUNT -gt 0 ] && echo "Δ$STASH_COUNT"
     return 0
@@ -167,23 +171,23 @@ show_git_stashes() {
 prompt_command() {
     # this statement *must* come first
     local last_exit_result=$?
-    local pwd=$(pwdtrunc)
-    local alert_tray="${font_colors['bold_green']}($(eximoji $last_exit_result)$(mailmoji)$(alarmoji)${font_colors['bold_green']})"
+    local pwd=$(_pwdtrunc)
+    local alert_tray="${font_colors['bold_green']}($(_eximoji $last_exit_result)$(_mailmoji)$(_alarmoji)${font_colors['bold_green']})"
     local user_tray="${font_colors['bold_green']}(${prompt_color}\u@\h:${pwd}${font_colors['bold_green']})"
     local time_tray="${font_colors['bold_green']}(${prompt_color}\t${font_colors['bold_green']})"
 
     # there's some logic, but it makes the git tray look nicer
-    local git_tray="${EMG}(${prompt_color}$(show_git_branch)"
-    if [[ "$(show_git_branch)" == "Ø" ]]; then
+    local git_tray="${EMG}(${prompt_color}$(_show_git_branch)"
+    if [[ "$(_show_git_branch)" == "Ø" ]]; then
         git_tray="${git_tray}${font_colors['bold_green']})"
     else
-        [[ -n "$(show_git_commit_plusminus)" ]] &&
-            git_tray="${git_tray} $(show_git_commit_plusminus)"
-        [[ -n "$(show_git_stashes)" ]] &&
-            git_tray="${git_tray} $(show_git_stashes)"
+        [[ -n "$(_show_git_commit_plusminus)" ]] &&
+            git_tray="${git_tray} $(_show_git_commit_plusminus)"
+        [[ -n "$(_show_git_stashes)" ]] &&
+            git_tray="${git_tray} $(_show_git_stashes)"
         git_tray="${git_tray}${EMG})"
     fi
-    export PS1="$(titlebar)${alert_tray}-${user_tray}-${time_tray}-${git_tray}${prompt_tail}"
+    export PS1="$(_titlebar)${alert_tray}-${user_tray}-${time_tray}-${git_tray}${prompt_tail}"
     return 0
 }
 
