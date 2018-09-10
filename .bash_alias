@@ -1,6 +1,4 @@
 # .bash_alias
-#
-# This is free and unencumbered software released into the public domain.
 
 # add a little color 
 alias ls="ls -k --color=auto"

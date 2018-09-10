@@ -1,8 +1,6 @@
 # .bashrc
 #
 # shell options and environment setup
-#
-# This is free and unencumbered software released into the public domain.
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return

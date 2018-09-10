@@ -1,6 +1,4 @@
 # .bash_function
-#
-# This is free and unencumbered software released into the public domain.
 
 # process table views 
 psmem()

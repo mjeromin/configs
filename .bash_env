@@ -1,8 +1,6 @@
 # .bash_env
 #
 #  environment
-#
-# This is free and unencumbered software released into the public domain.
 
 # history settings
 export HISTSIZE=1000  
