@@ -196,7 +196,7 @@ if [ $UID -eq "0" ]; then
     prompt_tail="🚧☠️ ${font_colors['bold_white']}  "
     prompt_color="${font_colors['red']}"
 else
-    prompt_tail="$(randomoji)${font_colors['bold_white']}  "
+    prompt_tail="$(_randomoji)${font_colors['bold_white']}  "
     prompt_color="${font_colors['green']}"
 fi
 
