@@ -36,7 +36,9 @@ endif
 
 " Redefine tab as 4 spaces, Stack Overflow answer from Laurence Gonsalves
 " stackoverflow.com/questions/1878974/redefine-tab-as-4-spaces
-set tabstop=8      " The width of the hard tabstop in spaces (ie. maximum width)
+"
+" Also added some PEP-8 choices.
+set tabstop=4      " The width of the hard tabstop in spaces (ie. maximum width)
 
 set softtabstop=0  " Setting this to a non-zero value other than tabstop will make the tab key (in insert mode)
                    " insert a combination of spaces (and possibly tabs) to simulate tab stops at this width. 
@@ -50,3 +52,16 @@ set shiftwidth=4   " The size of an 'indent'. It's also measured in spaces, so i
 
 set smarttab       " Enabling this will make the tab key (in insert mode) insert spaces or tabs to go to the next indent of the
                    " next tabstop when the cursor is at the beginning of a line (i.e. the only preceding characters are whitespace).
+
+set textwidth=79   " lines longer than 79 columns will be broken
+
+set shiftround     " round indent to multiple of 'shiftwidth'
+
+set autoindent     " align the new line indent with the previous line
+
+" Python mode for processing IDE files
+augroup filetypedetect
+    au BufRead,BufNewFile *.pyde setfiletype python
+    " associate *.pyde with python filetype
+augroup END
+
