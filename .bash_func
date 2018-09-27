@@ -21,8 +21,8 @@ aes_encrypt() {
     [[ ! -r "$1" ]] && echo \
         "$FUNCNAME(): ERROR No such file ${1}!" && return 1
     [[ -f "${1}.aes256" ]] && echo \
-        "$FUNCNAME(): ERROR $filename exists, bailing..." && return 1
-    openssl enc -aes-256-cbc -salt -a -in $1 -out ${1}.aes256
+        "$FUNCNAME(): ERROR $1 exists, bailing..." && return 1
+    openssl enc -aes-256-cbc -salt -a -md sha256 -in $1 -out ${1}.aes256
     return $?
 }
 
@@ -34,7 +34,7 @@ aes_decrypt() {
         "$FUNCNAME(): ERROR $filename exists, bailing..." && return 1
     [[ ! -r "$1" ]] && echo \
         "$FUNCNAME(): ERROR No such file ${1}!" && return 1
-    openssl enc -aes-256-cbc -salt -a -d -in ${1} -out $filename
+    openssl enc -aes-256-cbc -salt -a -d -md sha256 -in ${1} -out $filename
     return $?
 }
 
