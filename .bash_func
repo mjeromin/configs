@@ -15,29 +15,27 @@ psgrep() {
     ps aux | grep -v grep | grep --color $1
 }
 
-blow() {
-    [ -z "$1" ] && echo \
-        "Encrypt: $FUNCNAME FILE" && return 1
-    gpg -v -c -a --cipher-algo TWOFISH -o "$1.blow" "$1" 
-}
-
-fish() {
-    [ -z "$1" -o -z "$2" ] && echo \
-        "Decrypt: $FUNCNAME INFILE OUTFILE" && return 1
-    gpg -v -d --cipher-algo TWOFISH -o "$2" "$1"
-}
-
 aes_encrypt() {
     [ -z "$1" ] && echo \
         "Encrypt: $FUNCNAME INFILE" && return 1
-    openssl enc -aes-256-cbc -salt -a -in $1 -out ${1}.enc
+    [[ ! -r "$1" ]] && echo \
+        "$FUNCNAME(): ERROR No such file ${1}!" && return 1
+    [[ -f "${1}.aes256" ]] && echo \
+        "$FUNCNAME(): ERROR $filename exists, bailing..." && return 1
+    openssl enc -aes-256-cbc -salt -a -in $1 -out ${1}.aes256
+    return $?
 }
 
 aes_decrypt() {
     [ -z "$1" ] && echo \
         "Decrypt: $FUNCNAME INFILE" && return 1
-    filename=`echo $1 | cut -d. -f1`
-    openssl enc -aes-256-cbc -salt -a -d -in ${filename}.enc -out $filename
+    filename=`echo $1 | sed 's/[.]aes256$//'`
+    [[ -f "$filename" ]] && echo \
+        "$FUNCNAME(): ERROR $filename exists, bailing..." && return 1
+    [[ ! -r "$1" ]] && echo \
+        "$FUNCNAME(): ERROR No such file ${1}!" && return 1
+    openssl enc -aes-256-cbc -salt -a -d -in ${1} -out $filename
+    return $?
 }
 
 # A Perl one-liner to print a series of characters and their associated ASCII values
