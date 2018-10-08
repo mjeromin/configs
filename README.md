@@ -17,6 +17,9 @@ This controls the Bash prompt behavior, via `$PS1` and `$PROMPT_COMMAND` environ
 #### Alarm Clock
 This emoji is generated when the environment variable `ALARMCLOCK` is set to a 24-hour time `HH:MM` (ie. `ALARMCLOCK=15:45`). It is used to alert the user when the alarm time has exired by blinking the emoji. To turn off the clock, just unset this variable.
 
+#### Dark theme
+If your terminal uses a dark theme, you can switch the prompt to use a white font color by setting variable `DARK_THEME=1`
+
 ### Tested
 The prompt has been tested for working emoji and color in [Fedora 28](https://getfedora.org/) on the following terminals:
 * gnome-terminal
@@ -28,6 +31,8 @@ The prompt has been tested for working emoji and color in [Fedora 28](https://ge
 * lilyterm
 * termit
 * cool-retro-term (working emoji, obviously color is monochrome)
+
+(Also tested good in gnome-terminal on Cygwin)
 
 Unfortunately, these terminals (or at least the versions packaged with F28) do not seem to support emoji:
 * qterminal
