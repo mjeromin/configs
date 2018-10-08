@@ -164,10 +164,11 @@ _show_git_stashes() {
 }
 
 # Our prompt_command() ties together the functions above to assemble a dynamic prompt every time PS1 is loaded.
-# We take advantage of a few PS1 "macros":
+# We take advantage of a few Bash prompt escape sequences (http://tldp.org/HOWTO/Bash-Prompt-HOWTO/bash-prompt-escape-sequences.html): 
 # * \u: username of the current user
 # * \h: short hostname (up to the first '.'
 # * \t: the current time in 24-hour HH:MM:SS format
+# * \n: newline
 prompt_command() {
     # this statement *must* come first
     local last_exit_result=$?
@@ -187,16 +188,23 @@ prompt_command() {
             git_tray="${git_tray} $(_show_git_stashes)"
         git_tray="${git_tray}${EMG})"
     fi
-    export PS1="$(_titlebar)${alert_tray}-${user_tray}-${time_tray}-${git_tray}${prompt_tail}"
+    if [[ -n "$DARK_THEME" ]]; then
+        export PS1="$(_titlebar)${alert_tray}-${user_tray}-${time_tray}-${git_tray}\n${prompt_tail}${font_colors['bold_white']}  "
+        export PS2="${prompt_tail}${font_colors['bold_white']}  "
+    else
+        export PS1="$(_titlebar)${alert_tray}-${user_tray}-${time_tray}-${git_tray}\n${prompt_tail}${font_colors['black']}  "
+        export PS2="${prompt_tail}${font_colors['black']}  "
+    fi
+    
     return 0
 }
 
 # these are definitions will stay the same on every $PS1
-if [ $UID -eq "0" ]; then
-    prompt_tail="🚧☠️ ${font_colors['bold_white']}  "
+if [[ $UID -eq "0" ]]; then
+    prompt_tail="🚧☠️"
     prompt_color="${font_colors['red']}"
 else
-    prompt_tail="$(_randomoji)${font_colors['bold_white']}  "
+    prompt_tail="$(_randomoji)"
     prompt_color="${font_colors['green']}"
 fi
 
