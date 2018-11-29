@@ -19,23 +19,33 @@ aes_encrypt() {
     [ -z "$1" ] && echo \
         "Encrypt: $FUNCNAME INFILE" && return 1
     [[ ! -r "$1" ]] && echo \
-        "$FUNCNAME(): ERROR No such file ${1}!" && return 1
+        "$FUNCNAME(): ERROR No such source file ${1}!" && return 1
     [[ -f "${1}.aes256" ]] && echo \
-        "$FUNCNAME(): ERROR $1 exists, bailing..." && return 1
+        "$FUNCNAME(): ERROR destination ${1}.aes256 exists!" && return 1
     openssl enc -aes-256-cbc -salt -a -md sha256 -in $1 -out ${1}.aes256
-    return $?
+
+    # cleanup after failure
+    ret_code=$?
+    [[ $ret_code -ne 0 ]] && rm -v ${1}.aes256
+    return $ret_code
 }
 
 aes_decrypt() {
     [ -z "$1" ] && echo \
-        "Decrypt: $FUNCNAME INFILE" && return 1
+        "Decrypt: $FUNCNAME INFILE.aes256" && return 1
     filename=`echo $1 | sed 's/[.]aes256$//'`
-    [[ -f "$filename" ]] && echo \
-        "$FUNCNAME(): ERROR $filename exists, bailing..." && return 1
     [[ ! -r "$1" ]] && echo \
-        "$FUNCNAME(): ERROR No such file ${1}!" && return 1
+        "$FUNCNAME(): ERROR No such source file ${1}!" && return 1
+    [[ "$filename" == "$1" ]] && echo \
+        "$FUNCNAME(): ERROR invalid source filename! (does it end in '.aes256'?)" && return 1
+    [[ -f "$filename" ]] && echo \
+        "$FUNCNAME(): ERROR destination $filename exists!" && return 1
     openssl enc -aes-256-cbc -salt -a -d -md sha256 -in ${1} -out $filename
-    return $?
+
+    # cleanup after failure
+    ret_code=$?
+    [[ $ret_code -ne 0 ]] && rm -v $filename
+    return $ret_code
 }
 
 # A Perl one-liner to print a series of characters and their associated ASCII values
