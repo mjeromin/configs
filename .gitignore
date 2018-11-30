@@ -5,6 +5,7 @@
 !.bash*
 !.bc
 !.fwknoprc
+!.fwknoprc.aes256
 !.gitconfig
 !.tmux.conf
 !.vimrc
