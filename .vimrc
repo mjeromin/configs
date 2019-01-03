@@ -65,3 +65,25 @@ augroup filetypedetect
     " associate *.pyde with python filetype
 augroup END
 
+" Map key to toggle option and display option value after toggle
+function MapToggle(key, opt)
+  let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
+  exec 'nnoremap '.a:key.' '.cmd
+  exec 'inoremap '.a:key." \<C-O>".cmd
+endfunction
+command -nargs=+ MapToggle call MapToggle(<f-args>)
+
+" Shift-F5 - toggles line numbers
+MapToggle <S-F5> number
+
+" Shift-F6 - toggles list mode (ie. uncover tabs vs spaces)
+MapToggle <S-F6> list
+
+" Shift-F7 - toggles auto-wrap for long lines
+MapToggle <S-F7> wrap
+
+" Shift-F8 - toggles paste mode
+MapToggle <S-F8> paste
+
+" Shift-Up - toggles encryption and will prompt for password (masked with *)
+map <S-Up> :setlocal cm=blowfish2<CR> :X<CR>
